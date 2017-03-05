@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<library>
+  <!--JBuilder Library Definition File-->
+  <fullname>MySQL</fullname>
+  <class>
+    <path>[lib/mm.mysql-2.0.4-bin.jar]</path>
+  </class>
+</library>
+

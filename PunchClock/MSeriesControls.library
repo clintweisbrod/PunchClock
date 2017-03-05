@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<library>
+  <!--JBuilder Library Definition File-->
+  <fullname>MSeriesControls</fullname>
+  <class>
+    <path>[lib/MDateSelector.jar]</path>
+  </class>
+</library>
+

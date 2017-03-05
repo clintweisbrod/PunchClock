@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>
+
+<!--
+		Build.xml for PunchClock by Clint Weisbrod.
+		Usage
+				ant dist       -    to make a distribution, it updates from CVS
+														repository compiles, jars and makes a source zip.
+														It also makes a javadoc zip and updates the
+														build.properties file.
+
+				ant jar        -    Make the jar file, updating the build.properties
+				ant comp       -    Compile everything
+				ant javadocs   -    Build the javadocs
+				ant run	       -    runs the demo
+				ant min-jar    -    creates a small jar containing only the library cod
+														no, demos or test harness based on the excludes in
+														the file excludelist.txt
+
+		Creates directories classes, javadocs (temp) and jars in the current
+		directory. The outputs (MDateSelector.jar, javadocs.zip,
+		MDateSelectorSrc.zip) are placed in the jars directory
+-->
+
+<project name="punchclock" default="comp" basedir="..">
+	<!-- set global properties for this build -->
+	<property name="src" value="${basedir}/src"/>
+	<property name="build" value="${basedir}/classes"/>
+	<property name="jar" value="${basedir}/jar"/>
+	<property name="lib" value="${basedir}/lib"/>
+	<property name="launch4j.dir" value="${basedir}/deployment-support/launch4j"/>
+	<property name="build_classpath" value="${lib}/jdbc2_0-stdext.jar:${lib}/log4j.jar:${lib}/log4j-core.jar:${lib}/MDateSelector.jar:${lib}/itextpdf-5.1.0.jar:${lib}/itext-xtra-5.1.0.jar:${lib}/mysql-connector-java-5.1.8-bin.jar:${lib}/jbcl.jar"/>
+
+	<target name="init">
+		<tstamp/>
+	</target>
+
+	<target name="clean">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${jar}"/>
+	</target>
+
+	<target name="comp" description="Compile the packages (Default)">
+		<mkdir dir="${build}"/>
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac
+				srcdir="${src}"
+				destdir="${build}"
+				includes="punchclock/**"
+				classpath="${build_classpath}" />
+	</target>
+	
+	<target name="compd" description="Compile the packages with debug info">
+		<mkdir dir="${build}"/>
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac
+				srcdir="${src}"
+				destdir="${build}"
+				includes="punchclock/**"
+				classpath="${build_classpath}"
+				debug="on" />
+	</target>
+
+	<!-- Make the JAR -->
+	<target name="jar" depends="comp" description="Make the JAR">
+		<mkdir dir="${jar}"/>
+		<!-- Compile the java code from ${src} into ${build} -->
+		<jar jarfile="${jar}/PunchClock.jar" >
+			<fileset dir="${build}"
+							 includes="punchclock/**" />
+		</jar>
+	</target>
+	
+	<!-- Make the debug JAR -->
+	<target name="jard" depends="compd" description="Make the debug JAR">
+		<mkdir dir="${jar}"/>
+		<!-- Compile the java code from ${src} into ${build} with debug info -->
+		<jar jarfile="${jar}/PunchClock.jar" >
+			<fileset dir="${build}"
+							 includes="punchclock/**" />
+		</jar>
+	</target>
+	
+	<target name="rebuild" depends="clean,jar" description="Rebuild the JAR">
+	</target>
+	<target name="rebuildd" depends="clean,jard" description="Rebuild the debug JAR">
+	</target>
+	
+	<target name="exe" depends="rebuild" description="Build EXE">
+		<taskdef name="launch4j"
+			classname="net.sf.launch4j.ant.Launch4jTask"
+			classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+			<launch4j configFile="${basedir}/build/launch4j.xml" />
+	</target>
+	
+</project>

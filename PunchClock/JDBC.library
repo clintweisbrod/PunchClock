@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<library>
+  <!--JBuilder Library Definition File-->
+  <fullname>JDBC</fullname>
+  <class>
+    <path>[lib/jdbc2_0-stdext.jar]</path>
+  </class>
+</library>
+

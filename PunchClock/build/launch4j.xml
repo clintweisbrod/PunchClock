@@ -1,0 +1,33 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>../jar/PunchClock.jar</jar>
+  <outfile>../PunchClock.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>../resources/clock.ico</icon>
+  <classPath>
+    <mainClass>punchclock.AppMain</mainClass>
+    <cp>lib/itextpdf-5.1.0.jar</cp>
+    <cp>lib/itext-xtra-5.1.0.jar</cp>
+    <cp>lib/jbcl.jar</cp>
+    <cp>lib/jdbc2_0-stdext.jar</cp>
+    <cp>lib/log4j.jar</cp>
+    <cp>lib/log4j-core.jar</cp>
+    <cp>lib/MDateSelector.jar</cp>
+    <cp>lib/mysql-connector-java-5.1.8-bin.jar</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <minVersion>1.5.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJdk</jdkPreference>
+  </jre>
+</launch4jConfig>

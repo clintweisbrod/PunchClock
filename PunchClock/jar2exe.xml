@@ -1,0 +1,46 @@
+<launch4jConfig>
+  <debug>false</debug>
+  <dontWrapJar>true</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>jar/PunchClock.jar</jar>
+  <errTitle>PunchClock</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <classPath>
+    <mainClass>punchclock.AppMain</mainClass>
+    <cp>lib/itextpdf-5.1.0.jar</cp>
+    <cp>lib/itext-xtra-5.1.0.jar</cp>
+    <cp>lib/jbcl.jar</cp>
+    <cp>lib/jdbc2_0-stdext.jar</cp>
+    <cp>lib/log4j.jar</cp>
+    <cp>lib/log4j-core.jar</cp>
+    <cp>lib/MDateSelector.jar</cp>
+    <cp>lib/mysql-connector-java-5.1.8-bin.jar</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <minVersion>1.6.0_20</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <initialHeapPercent>100</initialHeapPercent>
+  </jre>
+  <versionInfo>
+    <fileVersion>1.1.0.0</fileVersion>
+	<txtFileVersion>1.1.0</txtFileVersion>
+    <fileDescription>Simple contract work tracking application</fileDescription>
+    <copyright>Copyright 2004, CWSoft</copyright>
+    <productVersion>1.1.0.0</productVersion>
+	<txtProductVersion>1.1.0</txtProductVersion>
+    <productName>PunchClock</productName>
+    <companyName>CWSoft</companyName>
+    <internalName>PunchClock</internalName>
+    <originalFilename>PunchClock.exe</originalFilename>
+  </versionInfo>
+
+</launch4jConfig>
