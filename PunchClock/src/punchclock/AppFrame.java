@@ -10,22 +10,19 @@ import java.awt.event.*;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
+import java.util.Date;
 import java.text.*;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.event.*;
 import org.apache.log4j.*;
 import com.borland.jbcl.layout.*;
-import javax.swing.JButton;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 public class AppFrame extends JFrame
 {
@@ -125,6 +122,7 @@ public class AppFrame extends JFrame
 	JButton btnAddExpense = new JButton();
 	JButton btnEditExpense = new JButton();
 	JButton btnDeleteExpense = new JButton();
+	JButton btnAddWorkDayAmount = new JButton();
 
 	JLabel elapsedTime = new JLabel();
 	JLabel lastWorkTime = new JLabel();
@@ -148,13 +146,18 @@ public class AppFrame extends JFrame
 	JLabel jLabel16 = new JLabel();
 	JLabel jLabel17 = new JLabel();
 	JLabel jLabel18 = new JLabel();
+	JLabel jLabel19 = new JLabel();
+	JLabel jLabel20 = new JLabel();
+	JLabel jLabel21 = new JLabel();
 
 	MDateEntryField cmbStartDate = new MDateEntryField(10);
 	MDateEntryField cmbEndDate = new MDateEntryField(10);
 	MDateEntryField cmbExpenseDate = new MDateEntryField(10);
+	MDateEntryField cmbWorkDayDate = new MDateEntryField(10);
 	MDefaultPullDownConstraints pdcStartDate = new MDefaultPullDownConstraints();
 	MDefaultPullDownConstraints pdcEndDate = new MDefaultPullDownConstraints();
 	MDefaultPullDownConstraints pdcExpenseDate = new MDefaultPullDownConstraints();
+	MDefaultPullDownConstraints pdcWorkDayDate = new MDefaultPullDownConstraints();
 	MSpinner spnRange = new MSpinner(0);
 
 //	LimitedStyledDocument lsd = new LimitedStyledDocument(MAX_COMMENT_CHARS);
@@ -177,6 +180,7 @@ public class AppFrame extends JFrame
 	SpinnerNumberModel model3 = new SpinnerNumberModel(0, 0, 100, 1);
 	JSpinner spnIncomeTaxPercent = new JSpinner(model3);
 	JProgressBar periodProgress = new JProgressBar(0, 100);
+	JTextField txtWorkDayHours = new JTextField();
 
 	private JButton jCompanyTaskButton = null;
 	private JTextField txtCPPContribution = null;
@@ -317,42 +321,42 @@ public class AppFrame extends JFrame
 	{
 		GridBagConstraints gridBagConstraints112 = new GridBagConstraints();
 		gridBagConstraints112.gridx = 0;
-		gridBagConstraints112.gridy = 4;
+		gridBagConstraints112.gridy = 6;
 		gridBagConstraints112.gridwidth = 5;
 		gridBagConstraints112.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints112.insets = new Insets(10, 5, 0, 5);
 		
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
-		gridBagConstraints4.gridy = 5;
+		gridBagConstraints4.gridy = 7;
 		gridBagConstraints4.gridwidth = 5;
 		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints4.insets = new Insets(0, 5, 0, 5);
 		
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.gridx = 0;
-		gridBagConstraints3.gridy = 6;
+		gridBagConstraints3.gridy = 8;
 		gridBagConstraints3.gridwidth = 5;
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.insets = new Insets(0, 5, 0, 5);
 		
 		GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
 		gridBagConstraints110.gridx = 0;
-		gridBagConstraints110.gridy = 7;
+		gridBagConstraints110.gridy = 9;
 		gridBagConstraints110.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints110.gridwidth = 5;
 		gridBagConstraints110.insets = new Insets(10, 5, 0, 5);
 		
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.gridx = 0;
-		gridBagConstraints5.gridy = 8;
+		gridBagConstraints5.gridy = 10;
 		gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints5.gridwidth = 5;
 		
 		accruedEarnings.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 		gridBagConstraints23.gridx = 0;
-		gridBagConstraints23.gridy = 9;
+		gridBagConstraints23.gridy = 11;
 		gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints23.gridwidth = 5;
 		gridBagConstraints23.anchor = GridBagConstraints.NORTH;
@@ -541,6 +545,14 @@ public class AppFrame extends JFrame
 				btnDeleteExpense_actionPerformed(e);
 			}
 		});
+		
+		btnAddWorkDayAmount.setToolTipText("Add a new work amount");
+		btnAddWorkDayAmount.setText("Add Time Worked");
+		btnAddWorkDayAmount.addActionListener(new ActionListener()  {
+			public void actionPerformed(ActionEvent e) {
+				btnAddWorkDayAmount_actionPerformed(e);
+			}
+		});
 
 		cmbExpenseDesc.setEditable(true);
 
@@ -582,6 +594,10 @@ public class AppFrame extends JFrame
 		txtPercent.setPreferredSize(new Dimension(90, 21));
 		txtPercent.setEditable(false);
 		txtPercent.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtWorkDayHours.setMinimumSize(new Dimension(30, 21));
+		txtWorkDayHours.setPreferredSize(new Dimension(30, 21));
+		txtWorkDayHours.setEditable(true);
+		txtWorkDayHours.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		spnIncomeTaxPercent.setPreferredSize(new Dimension(50, 25));
 		spnIncomeTaxPercent.getModel().setValue(new Integer(incomeTaxRate));
@@ -598,6 +614,9 @@ public class AppFrame extends JFrame
 		jMenuHelp.add(jMenuHelpAbout);
 		jMenuBar1.add(jMenuFile);
 		jMenuBar1.add(jMenuHelp);
+		
+		jLabel19.setText("Work Day Date");
+		jLabel20.setText("Hours");
 
 		contentPane.add(jPanel4,   new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0
 						,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 5), 35, 0));
@@ -622,9 +641,23 @@ public class AppFrame extends JFrame
 						,GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		jPanel1.add(btnPunchOut,					new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0
             ,GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
-		jPanel1.add(jLabel7,							new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0
+		
+		jPanel1.add(jLabel19,							new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0
+	            ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 5, 0, 0), 0, 0));
+		jPanel1.add(cmbWorkDayDate,						new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0
+	            ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
+		jPanel1.add(jLabel20,							new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0
+	            ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 5, 0, 0), 0, 0));
+		jPanel1.add(txtWorkDayHours,					new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0
+	            ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
+		jPanel1.add(btnAddWorkDayAmount,				new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0
+	            ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
+		jPanel1.add(jLabel21,							new GridBagConstraints(3, 3, 2, 1, 0.0, 0.0
+	            ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
+				
+		jPanel1.add(jLabel7,							new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 5, 0, 0), 0, 0));
-		jPanel1.add(cmbComment,						new GridBagConstraints(0, 3, 5, 1, 1.0, 0.0
+		jPanel1.add(cmbComment,						new GridBagConstraints(0, 5, 5, 1, 1.0, 0.0
             ,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5), 0, 0));
 		
 		jPanel1.add(elapsedTime, gridBagConstraints112);
@@ -752,6 +785,20 @@ public class AppFrame extends JFrame
 		cmbExpenseDate.addMChangeListener(new MChangeListener() {
 			public void valueChanged(MChangeEvent e) {
 				cmbExpenseDate_valueChanged(e);
+			}
+		});
+		
+		cmbWorkDayDate.setDateFormatter(new MSimpleDateFormat("MM/dd/yyyy"));
+		cmbWorkDayDate.setPreferredSize(new Dimension(100, 21));
+		cmbWorkDayDate.setMinimumSize(new Dimension(100, 21));
+		pdcWorkDayDate.firstDay = Calendar.SUNDAY;
+		pdcWorkDayDate.changerStyle = MDateChanger.BUTTON;
+		pdcWorkDayDate.hasShadow = true;
+		cmbWorkDayDate.setConstraints(pdcWorkDayDate);
+		cmbWorkDayDate.setEditable(false);
+		cmbWorkDayDate.addMChangeListener(new MChangeListener() {
+			public void valueChanged(MChangeEvent e) {
+				cmbWorkDayDate_valueChanged(e);
 			}
 		});
 
@@ -883,6 +930,11 @@ public class AppFrame extends JFrame
 			cmbTask.setSelectedItem(task);
 		else
 			cmbTask.setSelectedIndex(0);
+		
+		// Initialize cmbWorkDayDate to the date of the last timelog record
+		Date lastDate = DBMethods.getLastTimelogEndDate(ds);
+		if (lastDate != null)
+			cmbWorkDayDate.setValue(lastDate);
 
 		//Set comment combobox selection
 		if(comment != null)
@@ -1672,6 +1724,14 @@ public class AppFrame extends JFrame
 			ignoreEvents = false;
 		}
 	}
+	
+	/**Work day date changed action listener*/
+	public void cmbWorkDayDate_valueChanged(MChangeEvent ce)
+	{
+		if (ce.getType() == MChangeEvent.PULLDOWN_CLOSED)
+		{
+		}
+	}
 
 	/**docType combo box action listener*/
 	public void cmbDocType_actionPerformed(ActionEvent ae)
@@ -1715,7 +1775,9 @@ public class AppFrame extends JFrame
 											cmbCompany.getSelectedItem().toString(),
 											cmbTask.getSelectedItem().toString(),
 											cmbComment.getSelectedItem().toString(),
-											v.intValue()))
+											v.intValue(),
+											null,
+											null))
 		{
 			btnPunchIn.setEnabled(false);
 			spnPunchInOffset.setEnabled(false);
@@ -1887,6 +1949,116 @@ public class AppFrame extends JFrame
 		catch(Exception e)
 		{
 			cat.error(e.toString());
+		}
+
+		ignoreEvents = false;
+	}
+	
+	/**Add work amount action listener*/
+	public void btnAddWorkDayAmount_actionPerformed(ActionEvent ae)
+	{
+		ignoreEvents = true;
+		
+		try
+		{
+			// Get info for new work day amount
+			Date dt = cmbWorkDayDate.getValue();
+			String workDayHoursStr = txtWorkDayHours.getText();
+			double workDayHours = Double.parseDouble(workDayHoursStr);
+			
+			// Make sure chosen date (not including time) is greater than or equal to last timelog end date.
+			Date lastDate = DBMethods.getLastTimelogEndDate(ds);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(lastDate);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			Date lastDate0 = cal.getTime();
+			if (dt.getTime() >= lastDate0.getTime())
+			{
+				// We need to know the start date time for the new record to insert. There may already be 
+				// timelog records for the given date. If so, the start date needs to be at least one
+				// second greater than the end date of the last record for the given date. If there
+				// are no records, we default the start date time to 08:00:00.
+				Date startDate = DBMethods.getNextTimelogStartDate(ds, dt);
+				
+				// Add workDayHours to the startDate to get the endDate.
+				long numberOfWorkMillis = (long)(workDayHours * 3600 * 1000);
+				Date endDate = new Date(startDate.getTime() + numberOfWorkMillis);
+				
+				boolean success = false;
+				
+				// If endDate goes past midnight, we need to add two records.
+				Calendar cal1 = Calendar.getInstance();
+				cal1.setTime(startDate);
+				Calendar cal2 = Calendar.getInstance();
+				cal2.setTime(endDate);
+				if (cal1.get(Calendar.DAY_OF_YEAR) != cal2.get(Calendar.DAY_OF_YEAR))
+				{
+					cal1.set(Calendar.HOUR_OF_DAY, 23);
+					cal1.set(Calendar.MINUTE, 59);
+					cal1.set(Calendar.SECOND, 59);
+					cal1.set(Calendar.MILLISECOND, 0);
+					Date midnight = cal1.getTime();
+					boolean insert1 = DBMethods.insertNewTimelogEntry(ds,
+																	  cmbCompany.getSelectedItem().toString(),
+																	  cmbTask.getSelectedItem().toString(),
+																	  cmbComment.getSelectedItem().toString(),
+																	  0,
+																	  startDate,
+																	  midnight);
+					
+					// Advance midnight by one second to get 00:00:00 of next day
+					midnight.setTime(midnight.getTime() + 1000);
+					
+					// Now compute remaining work time by subtracting the difference between startDate and midnight
+					// from workDayHours
+					long remainingMillis = numberOfWorkMillis - (midnight.getTime() - startDate.getTime());
+					endDate.setTime(midnight.getTime() + remainingMillis);
+					boolean insert2 = DBMethods.insertNewTimelogEntry(ds,
+																	  cmbCompany.getSelectedItem().toString(),
+																	  cmbTask.getSelectedItem().toString(),
+																	  cmbComment.getSelectedItem().toString(),
+																	  0,
+																	  midnight,
+																	  endDate);
+					
+					success = insert1 && insert2;
+				}
+				else
+				{
+					success = DBMethods.insertNewTimelogEntry(ds,
+															  cmbCompany.getSelectedItem().toString(),
+															  cmbTask.getSelectedItem().toString(),
+															  cmbComment.getSelectedItem().toString(),
+															  0,
+															  startDate,
+															  endDate);
+				}
+				
+				if (success)
+				{
+					// Notify user that record(s) were added
+					jLabel21.setText(workDayHoursStr + " hours added.");
+					
+					// Clear message after 2 seconds
+					Timer timer = new Timer(2000, new ActionListener() {
+						  @Override
+						  public void actionPerformed(ActionEvent arg0) {
+							  jLabel21.setText("");
+						  }
+						});
+						timer.setRepeats(false); // Only execute once
+						timer.start(); // Go go go!
+				}
+			}
+		}
+		catch (ParseException e)
+		{
+		}
+		catch (NumberFormatException e)
+		{
 		}
 
 		ignoreEvents = false;

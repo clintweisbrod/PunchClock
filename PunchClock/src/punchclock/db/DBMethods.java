@@ -3,6 +3,8 @@ package punchclock.db;
 import punchclock.*;
 
 import java.text.*;
+import java.util.Calendar;
+import java.util.Date;
 import java.sql.*;
 import javax.swing.*;
 import org.apache.log4j.*;
@@ -53,6 +55,10 @@ public class DBMethods
 
 	private final static String SQL_DELETE_EXPENSE = "DELETE FROM expenses WHERE " +
 		"companyID = {0,number,0} AND date = ''{1}'' AND description = ''{2}''";
+	
+	private final static String SQL_SELECT_LAST_END_DATE = "SELECT MAX(end) FROM timelog";
+	
+	private final static String SQL_SELECT_GREATEST_END_DATE_FOR_DATE = "SELECT MAX(end) from timelog WHERE end > ''{0}''";
 
 	public DBMethods()
 	{
@@ -323,7 +329,7 @@ public class DBMethods
 	}
 
 	public static boolean insertNewTimelogEntry(DataSourceProxy ds, String company, String task, String comment,
-																							int offset)
+												int offset, java.util.Date inStart, java.util.Date inEnd)
 	{
 		boolean result = false;
 
@@ -332,17 +338,28 @@ public class DBMethods
 		int taskID = getTableInt(ds, "tasks", "id", "name='" + task + "'");
 		if(companyID != -1 && taskID != -1)
 		{
-			//Create a new record in the timelog table using adjusted current date/time
-			java.util.Date curTime = new java.util.Date();
-			curTime.setTime(curTime.getTime() - (offset * 60000)); //Subtract offset minutes
-			String start = DateTime.getDateTimeString(curTime);
-			Object[] insertArgs = {new Integer(companyID),
-														 new Integer(taskID),
-														 new String(start),
-														 new String(start),
-														 new String(comment)};
+			String start, end;
+			if (inStart == null)
+			{
+				//Create a new record in the timelog table using adjusted current date/time
+				java.util.Date curTime = new java.util.Date();
+				curTime.setTime(curTime.getTime() - (offset * 60000)); //Subtract offset minutes
+				start = DateTime.getDateTimeString(curTime);
+			}
+			else
+				start = DateTime.getDateTimeString(inStart);
+			if (inEnd == null)
+				end = start;
+			else
+				end = DateTime.getDateTimeString(inEnd);
+			
+			Object[] insertArgs = { new Integer(companyID),
+									new Integer(taskID),
+									new String(start),
+									new String(end),
+									new String(comment)};
 			String sql = MessageFormat.format(SQL_INSERT_TIMELOG, insertArgs);
-
+			
 			//Create a new record in the timelog table
 			Connection conn = null;
 			Statement stmt = null;
@@ -826,6 +843,106 @@ public class DBMethods
 			rs = stmt.executeQuery(sql);
 			if(rs.first())
 				result = rs.getLong(1);
+		}
+		catch (Exception e)
+		{
+			cat.error(e.toString());
+		}
+		finally
+		{
+			try
+			{
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			}
+			catch (Exception e)
+			{
+			}
+		}
+
+		return result;
+	}
+	
+	public static java.util.Date getLastTimelogEndDate(DataSourceProxy ds)
+	{
+		Connection conn = null;
+		ResultSet rs = null;
+		Statement stmt = null;
+		java.util.Date result = null;
+
+		try
+		{
+			conn = ds.getConnection();
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(SQL_SELECT_LAST_END_DATE);
+			String endTime = null;
+			if (rs.first())
+				endTime = rs.getString(1);
+			if (endTime != null)
+				result = DateTime.getDateFromDateString(endTime);				
+		}
+		catch (Exception e)
+		{
+			cat.error(e.toString());
+		}
+		finally
+		{
+			try
+			{
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			}
+			catch (Exception e)
+			{
+			}
+		}
+
+		return result;
+	}
+	
+	public static java.util.Date getNextTimelogStartDate(DataSourceProxy ds, java.util.Date inDate)
+	{
+		Connection conn = null;
+		ResultSet rs = null;
+		Statement stmt = null;
+		java.util.Date result = null;
+
+		try
+		{
+			conn = ds.getConnection();
+			stmt = conn.createStatement();
+			Object[] insertArgs = {new String(DateTime.getDateString(inDate))};
+			String sql = MessageFormat.format(SQL_SELECT_GREATEST_END_DATE_FOR_DATE, insertArgs);
+			rs = stmt.executeQuery(sql);
+			String endTime = null;
+			if (rs.first())
+				endTime = rs.getString(1);
+			if (endTime != null)
+			{
+				result = DateTime.getDateFromDateString(endTime);
+				
+				// Add one second to result
+				result.setTime(result.getTime() + 1000);
+			}
+			else
+			{
+				// No records found for given date so return 08:00:00 on the given date
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(inDate);
+				cal.set(Calendar.HOUR_OF_DAY, 8);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
+				result = cal.getTime();
+			}
 		}
 		catch (Exception e)
 		{
