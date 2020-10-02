@@ -40,21 +40,21 @@ public class DBMethods
 		"start >= ''{0}'' AND end < ''{1}'' AND companyID = {2,number,0}";
 
 	private final static String SQL_INSERT_TIMELOG = "INSERT INTO timelog (companyID, taskID, start, end, comment) " +
-		"VALUES ({0,number,0}, {1,number,0}, ''{2}'', ''{3}'', ''{4}'')";
+		"VALUES ({0,number,0}, {1,number,0}, ''{2}'', ''{3}'', \"{4}\")";
 
 	private final static String SQL_INSERT_EXPENSE = "INSERT INTO expenses (companyID, date, amount, hstApplicable, description) " +
-		"VALUES ({0,number,0}, ''{1}'', {2}, {3}, ''{4}'')";
+		"VALUES ({0,number,0}, ''{1}'', {2}, {3}, \"{4}\")";
 
 	private final static String SQL_UPDATE_TIMELOG = "UPDATE timelog SET end = ''{0}'', " +
-		"comment = ''{1}'' WHERE id = {2,number,0}";
+		"comment = \"{1}\" WHERE id = {2,number,0}";
 
 	private final static String SQL_UPDATE_EXPENSE = "UPDATE expenses SET date = ''{0}'', amount = {1}, " +
-		"hstApplicable = {2}, description = ''{3}'' WHERE id = {4,number,0}";
+		"hstApplicable = {2}, description = \"{3}\" WHERE id = {4,number,0}";
 
 	private final static String SQL_UPDATE_COMPANY_PATH = "UPDATE companies SET {0} = ''{1}'' WHERE id = {2,number,0}";
 
 	private final static String SQL_DELETE_EXPENSE = "DELETE FROM expenses WHERE " +
-		"companyID = {0,number,0} AND date = ''{1}'' AND description = ''{2}''";
+		"companyID = {0,number,0} AND date = ''{1}'' AND description = \"{2}\"";
 	
 	private final static String SQL_SELECT_LAST_END_DATE = "SELECT MAX(end) FROM timelog";
 	

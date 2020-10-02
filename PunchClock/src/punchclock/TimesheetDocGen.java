@@ -28,7 +28,7 @@ public class TimesheetDocGen extends DocGen
 		"AND taskID = {1} AND start >= ''{2}'' AND start < ''{3}'' ORDER BY start";
 
 	private final static String SQL_SELECT_DAILY_TIMELOGS2 = "SELECT * FROM timelog WHERE companyID = {0} " +
-		"AND taskID = {1} AND start >= ''{2}'' AND start < ''{3}'' AND comment = ''{4}'' ORDER BY start";
+		"AND taskID = {1} AND start >= ''{2}'' AND start < ''{3}'' AND comment = \"{4}\" ORDER BY start";
 
 	private final static String SQL_GET_DECIMAL_PRECISION = "SELECT decimalPrecision FROM companies WHERE id =";
 
