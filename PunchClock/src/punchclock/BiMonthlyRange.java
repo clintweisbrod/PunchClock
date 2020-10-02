@@ -29,6 +29,9 @@ public class BiMonthlyRange extends DateRange
 			zeroTimeCal.set(Calendar.DAY_OF_MONTH, 1);
 			start = zeroTimeCal.getTime();
 			lastSecondCal.set(Calendar.DAY_OF_MONTH, 15);
+			zeroTimeCal.set(Calendar.HOUR_OF_DAY, 24);
+			zeroTimeCal.set(Calendar.MINUTE, 59);
+			zeroTimeCal.set(Calendar.SECOND, 59);
 			end = lastSecondCal.getTime();
 		}
 		else
@@ -36,6 +39,9 @@ public class BiMonthlyRange extends DateRange
 			zeroTimeCal.set(Calendar.DAY_OF_MONTH, 16);
 			start = zeroTimeCal.getTime();
 			lastSecondCal.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
+			zeroTimeCal.set(Calendar.HOUR_OF_DAY, 24);
+			zeroTimeCal.set(Calendar.MINUTE, 59);
+			zeroTimeCal.set(Calendar.SECOND, 59);
 			end = lastSecondCal.getTime();
 		}
 	}

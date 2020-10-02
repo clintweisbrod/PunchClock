@@ -25,6 +25,9 @@ public class MonthlyRange extends DateRange
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		start = cal.getTime();
 		cal.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
 		end = cal.getTime();
 	}
 }
