@@ -453,7 +453,7 @@ public class AppFrame extends JFrame
 		jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPane.getViewport().setBackground(Color.white);
 		jEditPane.setCaretPosition(0);
-		jEditPane.setFont(new java.awt.Font("Courier", 0, 11));
+		jEditPane.setFont(new java.awt.Font(Font.MONOSPACED, Font.PLAIN, 11));
 		jEditPane.setEditable(false);
 
 		jMenuFile.setText("File");
